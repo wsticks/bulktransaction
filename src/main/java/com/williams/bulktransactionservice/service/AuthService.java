@@ -10,9 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.time.*;
 import java.util.function.Function;
 
 @Service
@@ -61,9 +63,11 @@ public class AuthService {
 
     public Map<String, Object> generateTokenWithExpiration(String username) {
         Map<String, Object> claims = new HashMap<>();
-        Date now = new Date();
-        Date expiry = new Date(now.getTime() + expirationMs);
-
+        ZoneId uatZone = ZoneId.of("Africa/Lagos");
+        ZonedDateTime nowUAT = ZonedDateTime.now(uatZone);
+        ZonedDateTime expiryUAT = nowUAT.plus(Duration.ofMillis(expirationMs));
+        Date now = Date.from(nowUAT.toInstant());
+        Date expiry = Date.from(expiryUAT.toInstant());
         String token = Jwts.builder()
                 .setClaims(claims)
                 .setSubject(username)

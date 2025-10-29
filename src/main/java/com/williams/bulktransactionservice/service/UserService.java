@@ -32,7 +32,7 @@ public class UserService {
     }
 
 
-    public User registerUser(@RequestBody UserRequest userRequest) {
+    public User registerUser(UserRequest userRequest) {
         Optional<User> userExists = userRepository.findByUsername(userRequest.getUsername());
         if (userExists.isPresent()) {
             throw new RuntimeException("Username already exists");
@@ -57,7 +57,7 @@ public class UserService {
 
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
-        response.put("expiresAt", expiration);
+        response.put("UATExpirationTime", expiration);
         response.put("username", username);
 
         return response;

@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,10 +25,18 @@ public class BulkTransactionController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> processBulkTransactions(@Valid @RequestBody
             BulkTransactionRequest bulkTransactionRequest){
         logger.info("ENTRY :transaction processing initiated  ");
         return bulkTransactionService.processBulkTransactions(bulkTransactionRequest);
+    }
+
+    @GetMapping("/metrics")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> viewSystemMetrics() {
+        logger.info("ENTRY: Admin accessed system metrics");
+        return bulkTransactionService.getSystemMetrics();
     }
 
 }
