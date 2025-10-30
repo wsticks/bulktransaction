@@ -67,7 +67,7 @@ public class BulkTransactionService {
             return ResponseEntity.badRequest().body(new BulkTransactionResponse(request.getBatchId(), duplicateResults));
         }
 
-        // ✅ 4. Process transactions asynchronously
+        // Process transactions asynchronously
         List<CompletableFuture<TransactionResult>> futures = request.getTransactions().stream()
                 .map(externalTransactionService::sendTransaction)
                 .toList();
@@ -76,7 +76,7 @@ public class BulkTransactionService {
                 .map(CompletableFuture::join)
                 .toList();
 
-        // ✅ 5. Persist each processed transaction
+        // Persist each processed transaction
         List<Transaction> entities = new ArrayList<>();
         for (TransactionResult result : results) {
             Transaction transaction = new Transaction();
